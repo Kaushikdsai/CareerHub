@@ -1,19 +1,21 @@
-import './App.css'
-import {Route, Routes} from 'react-router-dom'
-import { Home } from './pages/Home'
-import { ApplyJob } from './pages/ApplyJob'
-import { Applications } from './pages/Applications'
+import './App.css';
+import { Route, Routes } from 'react-router-dom';
+import { Home } from './pages/Home';
+import { StudentLogin } from './pages/StudentLogin';
+import { RecruiterLogin } from './pages/RecruiterLogin';
+import { StudentRegister } from './pages/StudentRegister';
 
-function App(){
+function App() {
   return (
     <div>
       <Routes>
-        <Route path='/' element={<Home />}></Route>
-        <Route path='/apply-job/:id' element={<ApplyJob />}></Route>
-        <Route path='/applications' element={<Applications />}></Route>
+        <Route path="/" element={<Home />} />
+        <Route path="/student-login" element={<StudentLogin />} />
+        <Route path="/student-register" element={<StudentRegister />} />
+        <Route path="/recruiter-login" element={<RecruiterLogin />} />
       </Routes>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

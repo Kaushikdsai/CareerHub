@@ -1,0 +1,26 @@
+input{
+    margin-bottom: 12px;
+}
+.main{
+    height: 500px;
+}
+.register-btn{
+    width: 160px;
+    margin-top: 15px;
+    cursor: pointer;
+    padding: 4px;
+    background-color: rgb(43, 43, 43);
+    color: white;
+    border: none;
+    color: rgb(255, 255, 255);
+}
+.register-btn:hover{
+    background-color: white;
+    color: rgb(43, 43, 43);
+}
+.msg-li{
+    margin: 10px 0 0 0;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}

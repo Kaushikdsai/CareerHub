@@ -1,5 +1,5 @@
 .hero-container{
-    background-color: #0040ff;
+    background-color: #333333;
     padding: 40px;
     .hero-title{
         text-align: center;
@@ -23,10 +23,11 @@
         padding: 5px;
         width: 90px;
         cursor: pointer;
-        background-color: #00bbff;
+        background-color: black;
         color: white;
     }
     button:hover{
-        background-color: #00bbff;
+        background-color: white;
+        color: black;
     }
 }
