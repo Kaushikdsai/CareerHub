@@ -1,0 +1,33 @@
+body{
+    background-color: white;
+}
+.navbar-logo{
+    width: 30px;
+}
+p{
+    margin: 0;
+}
+.navbar-left{
+    display: flex;
+    flex-direction: row;
+    margin-top: 12px;
+}
+.navbar-right{
+    display: flex;
+    flex-direction: row;
+    margin-left: 82%;
+    .student-login{
+        margin-right: 14px;
+    }
+    button{
+        background-color: white;
+        border: none;
+        cursor: pointer;
+    }
+    button:hover{
+        color: #007bff;
+    }
+}
+hr{
+    background-color: #007bff;
+}

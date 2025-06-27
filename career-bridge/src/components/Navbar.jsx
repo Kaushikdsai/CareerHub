@@ -1,16 +1,22 @@
-import React from 'react'
-import { assets } from '../assets/assets'
+import React from 'react'; 
+import '../styles/navbar.css'; 
 
-export const Navbar = () => {
+const Navbar = () => {
   return (
-    <div>
-        <div>
-            <img src={assets.logo}></img>
-            <div>
-                <button>Recruiter Login</button>
-                <button>Login</button>
-            </div>
+    <div className="navbar">
+      <div className="navbar-container">
+        <div className='navbar-left'>
+          <img src="src/assets/logo" className="navbar-logo" />
+          <p>CareerBridge</p>
         </div>
+        <div className="navbar-right">
+          <button className="student-login">Student Login</button>
+          <button className="recruiter-login">Recruiter Login</button>
+        </div>
+        <hr></hr>
+      </div>
     </div>
-  )
-}
+  );
+};
+
+export default Navbar

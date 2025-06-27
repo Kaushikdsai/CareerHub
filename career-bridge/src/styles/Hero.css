@@ -1,0 +1,32 @@
+.hero-container{
+    background-color: #0040ff;
+    padding: 40px;
+    .hero-title{
+        text-align: center;
+        color: white;
+    }
+    .hero-description{
+        text-align: center;
+        color: rgb(227, 226, 226);
+        margin-bottom: 20px;
+    }
+    input{
+        width: 600px;
+        padding: 5px;
+        margin-bottom: 8px;
+        margin-left: 29%;
+    }
+    button{
+        margin-top: 12px;
+        margin-left: 48%;
+        border: none;
+        padding: 5px;
+        width: 90px;
+        cursor: pointer;
+        background-color: #00bbff;
+        color: white;
+    }
+    button:hover{
+        background-color: #00bbff;
+    }
+}
