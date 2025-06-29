@@ -4,6 +4,7 @@ import { Home } from './pages/Home';
 import { StudentLogin } from './pages/StudentLogin';
 import { RecruiterLogin } from './pages/RecruiterLogin';
 import { StudentRegister } from './pages/StudentRegister';
+import { StudentView } from './pages/StudentView';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/student-login" element={<StudentLogin />} />
         <Route path="/student-register" element={<StudentRegister />} />
+        <Route path="/student-view" element={<StudentView />} />
         <Route path="/recruiter-login" element={<RecruiterLogin />} />
       </Routes>
     </div>

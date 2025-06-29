@@ -4,6 +4,7 @@ import '../styles/StudentRegister.css';
 
 export const StudentRegister = () => {
   const [name, setName]=useState('');
+  const [collegeName, setCollegeName]=useState('');
   const [email, setEmail]=useState('');
   const [password, setPassword]=useState('');
   const [confirmPassword, setConfirmPassword]=useState('');
@@ -26,58 +27,75 @@ export const StudentRegister = () => {
   return (
     <>
         <Navbar />
-        <div className="main">
+        <div className="sr-main">
             <form method="POST" onSubmit={handleSubmit}>
             <h1>STUDENT REGISTER</h1>
             <div className="details">
                 <div className="form-group">
-                <label htmlFor="name">Name</label>
-                <br />
-                <input
-                    id="name"
-                    name="name"
-                    placeholder="Enter your Name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                />
+                    <label htmlFor="name">Name</label>
+                    <br />
+                    <input
+                        id="name"
+                        name="name"
+                        placeholder="Enter your Name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                    />
                 </div>
                 <div className="form-group">
-                <label htmlFor="email">Email</label>
-                <br />
-                <input
-                    id="email"
-                    name="email"
-                    placeholder="Enter your email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                />
+                    <label htmlFor="email">Email</label>
+                    <br />
+                    <input
+                        id="email"
+                        name="email"
+                        placeholder="Enter your email"
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
                 </div>
                 <div className="form-group">
-                <label htmlFor="password1">Create a password</label>
-                <br />
-                <input
-                    id="password1"
-                    name="password"
-                    placeholder="Enter your password"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
+                    <label htmlFor="college-name">College Name</label>
+                    <br />
+                    <input
+                        id="name"
+                        name="college-name"
+                        placeholder="Enter your  college name"
+                        value={collegeName}
+                        onChange={(e) => setCollegeName(e.target.value)}
+                    />
                 </div>
                 <div className="form-group">
-                <label htmlFor="password2">Confirm your password</label>
-                <br />
-                <input
-                    id="password2"
-                    name="confirm_password"
-                    placeholder="Confirm your password"
-                    type="password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                />
+                    <label htmlFor="college-id">Upload your college ID</label>
+                    <br />
+                    <input type="file" name="file" accept=".doc,.docx,.pdf" required />
+                    <br />
                 </div>
-                {messages.length > 0 && (
+                <div className="form-group">
+                    <label htmlFor="password1">Create a password</label>
+                    <br />
+                    <input
+                        id="password1"
+                        name="password"
+                        placeholder="Enter your password"
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="password2">Confirm your password</label>
+                    <br />
+                    <input
+                        id="password2"
+                        name="confirm_password"
+                        placeholder="Confirm your password"
+                        type="password"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                    />
+                </div>
+                {messages.length>0 && (
                 <ul className="msg-li">
                     {messages.map((message, index) => (
                     <li key={index} style={{ color: 'red' }}>

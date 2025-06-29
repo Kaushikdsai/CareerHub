@@ -1,8 +1,31 @@
-input{
-    margin-bottom: 12px;
+.sr-main{
+    margin-top: 90px;
+    padding: 20px;
+    height: 430px;
+    color: white;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 10px;
+    background-color: #333333;
+    width: 900px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    height: 100%;
 }
-.main{
-    height: 500px;
+.password-details{
+    margin-top: 20px;
+    margin-bottom: 16px;
+}
+label{
+    font-size: 24px;
+}
+input{
+    width: 260px;
+    margin-top: 12px;
+    padding: 5px;
+    margin-bottom: 12px;
 }
 .register-btn{
     width: 160px;

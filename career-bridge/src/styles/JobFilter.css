@@ -1,0 +1,28 @@
+.filters-container{
+    display: flex;
+    flex-direction: row;
+}
+.dept-display, .jobtype-display, .worklocation-display, .stipend-display, .jobduration-display{
+    display: flex;
+    flex-direction: column;
+    label{
+        font-size: 15px;
+    }
+    input{
+        width:19px;
+        margin-left: 10px;
+        margin-right: 5px;
+        display: inline;
+    }
+}
+.jobdomain-container, .dept-container, .jobtype-container, .worklocation-container, .stipend-container, .jobduration-container{
+    color: white;
+    border: 1px solid rgb(95, 95, 95);
+    width: 16%;
+    padding: 19px;
+}
+.jobdomain-container{
+    label, h3{
+        font-size: 15px;
+    }
+}

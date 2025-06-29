@@ -1,0 +1,11 @@
+.filters-btn{
+    width: 128px;
+    padding: 6px;
+    margin-top: 0.4%;
+    margin-left: 46%;
+}
+.filters-btn:hover{
+    background-color: black;
+    color: white;
+    border: none;
+}
