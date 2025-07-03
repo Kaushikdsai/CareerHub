@@ -5,6 +5,7 @@ import { StudentLogin } from './pages/StudentLogin';
 import { RecruiterLogin } from './pages/RecruiterLogin';
 import { StudentRegister } from './pages/StudentRegister';
 import { StudentView } from './pages/StudentView';
+import { RecruiterView } from './pages/RecruiterView';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/student-register" element={<StudentRegister />} />
         <Route path="/student-view" element={<StudentView />} />
         <Route path="/recruiter-login" element={<RecruiterLogin />} />
+        <Route path='/recruiter-view' element={<RecruiterView/>} />
       </Routes>
     </div>
   );
