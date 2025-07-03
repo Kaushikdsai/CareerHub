@@ -1,16 +1,13 @@
 import React from 'react';
 import Navbar from '../components/Navbar'
 import '../styles/RecruiterView.css'
-import {NewJob} from '../components/NewJob'
 
 export const RecruiterView = () => {
   return (
     <div>
         <Navbar />
-        <h2>Recruiter Form</h2>
-        <div className="recruiter-form">
-          <NewJob />
-        </div>
+        <h1>Want to add a new job?</h1>
+        <a href='add-new-job'><button>Click here</button></a>
     </div>
   );
 };

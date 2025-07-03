@@ -1,0 +1,33 @@
+.form-container{
+    background-color: #333333;
+    padding: 80px;
+    text-align: center;
+    margin-top: 90px;
+    width: 50%;
+    margin-left: 20%;
+}
+h2{
+    margin-top: 0;
+    margin-bottom: 70px;
+}
+#department{
+    width: 97px;
+}
+#job-type{
+    width: 188px;
+}
+#work-loc{
+    width: 139px;
+}
+#job-dur{
+    width: 150px;
+}
+#stipend{
+    width: 143px;
+}
+.section{
+    margin-bottom: 10px;
+}
+button{
+    margin-top: 8px;
+}
