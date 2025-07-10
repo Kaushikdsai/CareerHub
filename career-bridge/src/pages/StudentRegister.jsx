@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 import '../styles/StudentRegister.css';
@@ -11,9 +12,10 @@ export const StudentRegister = () => {
   const [email,setEmail]=useState('');
   const [password,setPassword]=useState('');
   const [confirmPassword,setConfirmPassword]=useState('');
+  const [skills, setSkills] = useState([]);
   const [messages,setMessages]=useState([]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const errors = [];
     if(!name) errors.push('Name is required!');
@@ -22,7 +24,25 @@ export const StudentRegister = () => {
     if(password!==confirmPassword) errors.push('Passwords do not match!');
     setMessages(errors);
     if(errors.length===0){
-        setMessages(['Registration Successful!']);
+        try{
+            const formData=new FormData();
+            formData.append('name',name);
+            formData.append('email', email);
+            formData.append('password', password);
+            formData.append('collegeName', collegeName);
+            formData.append('yearOfGraduation', yearOfGraduation);
+            formData.append('location', location);
+            formData.append('file',document.querySelector('input[name="file"]').files[0]);
+            skills.forEach(skill => formData.append('skills[]',skill));
+
+            const res=await axios.post('http://localhost:5000/auth/student/register', formData, {
+              headers: {'Content-Type': 'multipart/form-data'}
+            });
+            setMessages([res.data.message]);
+        }
+        catch(err){
+            setMessages([err.response?.data?.message || 'Registration failed']);
+        }
     }
   };
 
@@ -31,7 +51,7 @@ export const StudentRegister = () => {
       <Navbar />
       <div className="sr-main">
         <form method="POST" onSubmit={handleSubmit}>
-          <h1>STUDENT REGISTER</h1>
+          <h1>STUDENT REGISTRATION</h1>
           <div className="details">
             <div className="form-group">
               <label htmlFor="name">Name</label><br />
@@ -90,7 +110,7 @@ export const StudentRegister = () => {
               />
             </div>
 
-            <AddSkills />
+            <AddSkills skills={skills} setSkills={setSkills}/>
 
             <div className="form-group">
               <label htmlFor="resume">Upload your Resume</label><br />

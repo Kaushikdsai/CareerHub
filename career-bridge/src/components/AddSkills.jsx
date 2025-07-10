@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import '../styles/AddSkills.css';
 
-export const AddSkills = () => {
+export const AddSkills = ({ skills,setSkills }) => {
   const [skillInput,setSkillInput]=useState('');
-  const [skills,setSkills]=useState([]);
 
   const handleKeyDown = (e) => {
     if(e.key==='Enter' && skillInput.trim()){
