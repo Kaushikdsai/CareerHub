@@ -1,11 +1,50 @@
-.filters-btn{
-    width: 128px;
-    padding: 6px;
-    margin-top: 0.4%;
-    margin-left: 46%;
+.filters-btn {
+  margin: 20px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
 }
-.filters-btn:hover{
-    background-color: black;
-    color: white;
-    border: none;
+
+.filters-btn:hover {
+  background-color: #218838;
+}
+
+.job-list-container {
+  padding: 20px;
+  background-color: #f7f7f7;
+}
+
+.job-list {
+  list-style: none;
+  padding: 0;
+}
+
+.job-card {
+  border: 1px solid #ccc;
+  padding: 16px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  color: black;
+}
+
+.job-card h3 {
+  margin-top: 0;
+}
+
+.apply-btn {
+  background-color: #007bff;
+  color: white;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.apply-btn:hover {
+  background-color: #0056b3;
 }
