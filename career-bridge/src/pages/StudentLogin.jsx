@@ -2,20 +2,30 @@ import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 import '../styles/StudentLogin.css';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 export const StudentLogin = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [messages, setMessages] = useState([]);
+  const [email,setEmail]=useState('');
+  const [password,setPassword]=useState('');
+  const [messages,setMessages]=useState([]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!email || !password) {
-      setMessages(['Email and password are required!']);
-    } else {
-      setMessages(['Login successful!']);
+    if(!email || !password){
+        setMessages(['Email and password are required!']);
+        return;
     }
-  };
+    
+    try{
+        const response=await axios.post('http://localhost:5000/auth/student/login', {
+            email,password
+        })
+        setMessages([response.data.message]);
+    }
+    catch{
+      setMessages(['Login failed']);
+    }
+  }
 
   return (
     <>
