@@ -1,0 +1,45 @@
+.hero {
+  background-color: rgb(68, 68, 68); 
+  color: white;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  margin-bottom: 10px;
+}
+
+.hero p {
+  font-size: 1.2rem;
+}
+
+.cta-button {
+  padding: 7px;
+  color: white;
+  background-color: #891900;
+  text-decoration: none;
+}
+
+.features {
+  padding: 50px 20px;
+  background: #f9f9f9;
+  color: black;
+  text-align: center;
+}
+
+.features-container {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.feature-card {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 280px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}

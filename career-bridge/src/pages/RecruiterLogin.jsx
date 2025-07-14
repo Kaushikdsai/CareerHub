@@ -5,7 +5,6 @@ export const RecruiterLogin = () => {
     const [email,setEmail]=useState('');
     const [password,setPassword]=useState('');
     const [messages,setMessages]=useState([]);
-
     const handleSubmit = () => {
         if(!email || !password){
             setMessages(['Email and password are required!']);
@@ -59,7 +58,7 @@ export const RecruiterLogin = () => {
                 <br />
                 <button className='login-btn' type="submit">Login</button>
                 <p className='no-account'>
-                    Don't have an Account? <a href="register/" className="a1">Signup</a>
+                    Don't have an Account? <a href="recruiter-register/" className="a1">Signup</a>
                 </p>
                 </div>
             </form>

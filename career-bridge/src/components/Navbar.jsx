@@ -1,5 +1,4 @@
 import React from 'react'; 
-
 import '../styles/navbar.css'; 
 import { Link } from 'react-router-dom';
 
@@ -11,14 +10,14 @@ const Navbar = () => {
           <img src="src/assets/logo" className="navbar-logo" />
           <p className='site-title'>CareerBridge</p>
         </div>
-        <div className="navbar-right">
+        <nav className="navbar-right">
           <Link to="/student-login">
-            <button className="student-login">Student Login</button>
-          </Link>
-          <Link to="/recruiter-login">
-            <button className="recruiter-login">Recruiter Login</button>
-          </Link>
-        </div>
+              <button>Student Login</button>
+            </Link>
+            <Link to="/recruiter-login">
+              <button>Recruiter Login</button>
+            </Link>
+        </nav>
         <hr></hr>
       </div>
     </div>
