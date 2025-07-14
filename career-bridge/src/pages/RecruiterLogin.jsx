@@ -5,7 +5,8 @@ export const RecruiterLogin = () => {
     const [email,setEmail]=useState('');
     const [password,setPassword]=useState('');
     const [messages,setMessages]=useState([]);
-    const handleSubmit = () => {
+    const handleSubmit = (e) => {
+        e.preventDefault();
         if(!email || !password){
             setMessages(['Email and password are required!']);
         }
