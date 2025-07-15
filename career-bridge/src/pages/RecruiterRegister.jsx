@@ -6,7 +6,7 @@ import axios from 'axios';
 export const RecruiterRegister = () => {
     const [name,setName]=useState('');
     const [email,setEmail]=useState('');
-    const [phoneNum,setPhoneNum]=useState('');
+    const [phoneNumber,setPhoneNumber]=useState('');
     const [company,setCompany]=useState('');
     const [designation,setDesignation]=useState('');
     const [location,setLocation]=useState('');
@@ -20,7 +20,7 @@ export const RecruiterRegister = () => {
         const errors=[];
         if(!name) errors.push('Name is required!');
         if(!email) errors.push('Email is required!');
-        if(!phoneNum) errors.push('Phone number is required!');
+        if(!phoneNumber) errors.push('Phone number is required!');
         if(!company) errors.push('Company/Institute name is required!');
         if(!designation) errors.push('Designation/Role is required!');
         if(!location) errors.push('Location is required!');
@@ -35,9 +35,9 @@ export const RecruiterRegister = () => {
             const res=await axios.post('http://localhost:5000/auth/recruiter/register', {
                 name,
                 email,
-                phoneNum,
-                company,
-                designation,
+                phoneNumber,
+                companyOrInstituteName: company,
+                role: designation,
                 location,
                 password
             });
@@ -90,8 +90,8 @@ export const RecruiterRegister = () => {
                     name="phone"
                     placeholder="Enter your phone number"
                     type="number"
-                    value={phoneNum}
-                    onChange={(e) => setPhoneNum(e.target.value)}
+                    value={phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
                 />
                 </div>
                 <div className="form-group">

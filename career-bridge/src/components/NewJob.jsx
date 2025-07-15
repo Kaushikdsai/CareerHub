@@ -59,11 +59,21 @@ export const NewJob = () => {
             alert("Recruiter not logged in!");
             return;
         }
-        await axios.post('http://localhost:5000/postJob/recruiter/newjob', {
+        const token = localStorage.getItem('token'); // Make sure token is stored at login
+
+        await axios.post(
+        'http://localhost:5000/postJob/recruiter/newjob',
+        {
             ...formData,
             jobDomain: actualJob,
             recruiterId: recruiterId
-        });
+        },
+        {
+            headers: {
+            Authorization: `Bearer ${token}`
+            }
+        }
+        );
         alert('Job posted successfully!');
         setFormData({
             department: '',
