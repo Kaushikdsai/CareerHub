@@ -6,36 +6,92 @@ import { JobFilter } from '../components/JobFilter';
 import '../styles/StudentView.css';
 
 export const StudentView = () => {
-  const [jobs, setJobs] = useState([]);
+  const [jobs,setJobs]=useState([]);
+  const [filteredJobs,setFilteredJobs]=useState([]);
+  const [filters,setFilters]=useState({
+    domain: '',
+    department:[],
+    jobType: [],
+    location: [],
+    duration: [],
+    stipend: []
+  })
 
   useEffect(() => {
-    const fetchJobs = async () => {
-      try {
-        const res = await axios.get('http://localhost:5000/postJob/all');
+    const fetchJobs=async () => {
+      try{
+        const res=await axios.get('http://localhost:5000/postJob/all');
         setJobs(res.data);
-      } catch (err) {
+        setFilteredJobs(res.data);
+      }
+      catch(err){
         console.error('Error loading jobs!', err);
       }
     };
-
     fetchJobs();
   }, []);
+
+  const applyFilters = () => {
+      let filtered=[...jobs];
+      if(filters.domain && filters.domain!=='any'){
+          filtered=filtered.filter(job =>
+            job.jobDomain?.toLowerCase().includes(filters.domain.toLowerCase())
+          );
+      }
+      if(filters.department.length>0 && !filters.department.includes('any')){
+        filtered=filtered.filter(job =>
+          filters.department.includes(job.department?.toLowerCase())
+        );
+      }
+      if(filters.jobType.length>0 && !filters.jobType.includes('any')){
+        filtered=filtered.filter(job =>
+          filters.jobType.includes(job.jobType?.toLowerCase())
+        );
+      }
+      if(filters.location.length>0 && !filters.location.includes('any')){
+        filtered=filtered.filter(job =>
+          filters.location.includes(job.workLocation?.toLowerCase())
+        );
+      }
+
+      if(filters.duration.length>0 && !filters.duration.includes('any')){
+        filtered=filtered.filter(job =>
+          filters.duration.includes(job.jobDuration)
+        );
+      }
+      if(filters.stipend.length>0 && !filters.stipend.includes('any')){
+        filtered=filtered.filter(job =>
+          filters.stipend.includes(job.stipend)
+        );
+      }
+      setFilteredJobs(filtered);
+  }
 
   return (
     <>
       <Navbar />
       <Hero />
-      <JobFilter />
-      <button className="filters-btn">Apply Filters</button>
+      <JobFilter setFilters={setFilters}/>
+      <button className="filters-btn" onClick={applyFilters}>Apply Filters</button>
 
       <div className="job-list-container">
         <h2>Jobs posted by Recruiters</h2>
-        {jobs.length === 0 ? (
+        {filteredJobs.length === 0 ? (
           <p>No jobs found.</p>
         ) : (
           <ul className="job-list">
-            {jobs.map((job) => (
+            {filteredJobs.map((job) => (
               <li key={job._id} className="job-card">
+                {job.organizationLogo && (
+                  <img
+                    src={`http://localhost:5000/uploads/${job.organizationLogo}`}
+                    alt="Org Logo"
+                    className="org-logo"
+                  />
+                )}
+                <h3>{job.jobDomain}</h3>
+                <p><strong>Organization:</strong> {job.organizationName}</p>
+                <p><strong>Role:</strong> {job.recruiterRole}</p>
                 <h3>{job.jobDomain}</h3>
                 <p><strong>Department:</strong> {job.department}</p>
                 <p><strong>Type:</strong> {job.jobType}</p>

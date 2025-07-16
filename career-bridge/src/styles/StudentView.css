@@ -13,6 +13,13 @@
   background-color: #218838;
 }
 
+.org-logo {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+
 .job-list-container {
   padding: 20px;
   background-color: #f7f7f7;

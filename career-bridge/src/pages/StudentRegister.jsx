@@ -10,7 +10,7 @@ export const StudentRegister = () => {
   const [yearOfGraduation,setYearOfGraduation]=useState('');
   const [location,setLocation]=useState('');
   const [email,setEmail]=useState('');
-  const [phoneNum,setPhoneNum]=useState('');
+  const [phoneNumber,setPhoneNumber]=useState('');
   const [password,setPassword]=useState('');
   const [confirmPassword,setConfirmPassword]=useState('');
   const [skills, setSkills]=useState([]);
@@ -29,7 +29,7 @@ export const StudentRegister = () => {
             const formData=new FormData();
             formData.append('name',name);
             formData.append('email', email);
-            formData.append('phoneNum', phoneNum);
+            formData.append('phoneNumber', phoneNumber);
             formData.append('password', password);
             formData.append('collegeName', collegeName);
             formData.append('yearOfGraduation', yearOfGraduation);
@@ -79,14 +79,14 @@ export const StudentRegister = () => {
             </div>
 
             <div className="form-group">
-              <label htmlFor="phoneNum">Phone Number</label><br />
+              <label htmlFor="phoneNumber">Phone Number</label><br />
               <input
-                id="phoneNum"
-                name="phoneNum"
-                type="phoneNum"
+                id="phoneNumber"
+                name="phoneNumber"
+                type="phoneNumber"
                 placeholder="Enter your phone number"
-                value={phoneNum}
-                onChange={(e) => setPhoneNum(e.target.value)}
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
               />
             </div>
 

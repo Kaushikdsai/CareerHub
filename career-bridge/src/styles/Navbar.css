@@ -17,6 +17,7 @@ body{
     display: flex;
     flex-direction: row;
     margin-left: 82%;
+    
     .student-login{
         margin-right: 14px;
     }

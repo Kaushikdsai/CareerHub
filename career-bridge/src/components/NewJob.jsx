@@ -65,8 +65,7 @@ export const NewJob = () => {
         'http://localhost:5000/postJob/recruiter/newjob',
         {
             ...formData,
-            jobDomain: actualJob,
-            recruiterId: recruiterId
+            jobDomain: actualJob
         },
         {
             headers: {

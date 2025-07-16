@@ -8,6 +8,7 @@ export const RecruiterRegister = () => {
     const [email,setEmail]=useState('');
     const [phoneNumber,setPhoneNumber]=useState('');
     const [company,setCompany]=useState('');
+    const [logo,setLogo]=useState(null);
     const [designation,setDesignation]=useState('');
     const [location,setLocation]=useState('');
     const [password,setPassword]=useState('');
@@ -32,14 +33,21 @@ export const RecruiterRegister = () => {
             setMessages(['Registration Successful!']);
         }
         try{
-            const res=await axios.post('http://localhost:5000/auth/recruiter/register', {
-                name,
-                email,
-                phoneNumber,
-                companyOrInstituteName: company,
-                role: designation,
-                location,
-                password
+            const formData=new FormData();
+            formData.append('name', name);
+            formData.append('email', email);
+            formData.append('phoneNumber', phoneNumber);
+            formData.append('companyOrInstituteName', company);
+            formData.append('role', designation);
+            formData.append('location', location);
+            formData.append('password', password);
+            if (logo) {
+                formData.append('logo', logo);
+            }
+            const res = await axios.post('http://localhost:5000/auth/recruiter/register', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
             });
             const {recruiterId}=res.data;
             localStorage.setItem('recruiterId',recruiterId);
@@ -104,6 +112,16 @@ export const RecruiterRegister = () => {
                         onChange={(e) => setCompany(e.target.value)}
                     />
                 </div>
+                <div className="form-group">
+                    <label htmlFor="logo">Upload Organization Logo</label><br />
+                    <input
+                        id="logo"
+                        name="logo"
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => setLogo(e.target.files[0])}
+                    />
+                    </div>      
                 <div className="form-group">
                     <label htmlFor="designation">Designation / Role</label><br />
                     <input
