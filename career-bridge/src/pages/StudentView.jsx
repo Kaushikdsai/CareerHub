@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom'; 
 import axios from 'axios';
 import { Hero } from '../components/Hero';
 import Navbar from '../components/Navbar';
@@ -6,6 +7,7 @@ import { JobFilter } from '../components/JobFilter';
 import '../styles/StudentView.css';
 
 export const StudentView = () => {
+  const navigate=useNavigate();
   const [jobs,setJobs]=useState([]);
   const [filteredJobs,setFilteredJobs]=useState([]);
   const [filters,setFilters]=useState({
@@ -67,6 +69,10 @@ export const StudentView = () => {
       setFilteredJobs(filtered);
   }
 
+  const handleApply = (jobId) => {
+    navigate(`/job/${jobId}`);
+  }
+
   return (
     <>
       <Navbar />
@@ -98,7 +104,7 @@ export const StudentView = () => {
                 <p><strong>Location:</strong> {job.workLocation}</p>
                 <p><strong>Duration:</strong> {job.jobDuration}</p>
                 <p><strong>Stipend:</strong> {job.stipend}</p>
-                <button className="apply-btn">Apply</button>
+                <button className="apply-btn" onClick={() => handleApply(job._id)}>Apply</button>
               </li>
             ))}
           </ul>

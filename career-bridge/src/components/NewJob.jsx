@@ -5,6 +5,7 @@ import Navbar from '../components/Navbar';
 
 export const NewJob = () => {
     const [messages,setMessages]=useState([]);
+    const [jdFile, setJDFile] = useState(null);
     const [formData,setFormData]=useState({
         department: '',
         jobDomain: '',
@@ -13,8 +14,13 @@ export const NewJob = () => {
         jobDuration: '',
         stipend: '',
         other: '',
-        onsiteLocation: ''
+        onsiteLocation: '',
+        jdFile: null,
     });
+    const handleFileUpload = (e) => {
+        setJDFile(e.target.files[0]);
+    };
+
     const handleChange = (e) => {
         setFormData((prev) => ({
             ...prev,
@@ -59,34 +65,43 @@ export const NewJob = () => {
             alert("Recruiter not logged in!");
             return;
         }
-        const token = localStorage.getItem('token'); // Make sure token is stored at login
-
-        await axios.post(
-        'http://localhost:5000/postJob/recruiter/newjob',
-        {
-            ...formData,
-            jobDomain: actualJob
-        },
-        {
-            headers: {
-            Authorization: `Bearer ${token}`
-            }
+        const token = localStorage.getItem('token'); 
+        try{
+            const data=new FormData();
+            data.append("department",formData.department);
+            data.append("jobDomain",actualJob);
+            data.append("jobType",formData.jobType);
+            data.append("workLocation",formData.workLocation);
+            data.append("jobDuration",formData.jobDuration);
+            data.append("stipend",formData.stipend);
+            data.append("onsiteLocation",formData.onsiteLocation);
+            data.append("recruiterId",recruiterId);
+            data.append("jdFile",jdFile);
+            await axios.post('http://localhost:5000/postJob/recruiter/newjob', data,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            alert('Job posted successfully!');
+            setFormData({
+                department: '',
+                jobDomain: '',
+                jobType: '',
+                workLocation: '',
+                jobDuration: '',
+                stipend: '',
+                other: '',
+                onsiteLocation: ''
+            });
+            setJDFile(null);
+            setMessages([]);
         }
-        );
-        alert('Job posted successfully!');
-        setFormData({
-            department: '',
-            jobDomain: '',
-            jobType: '',
-            workLocation: '',
-            jobDuration: '',
-            stipend: '',
-            other: '',
-            onsiteLocation: ''
-        });
-        setMessages([]);
+        catch(err){
+            console.error("Error posting job:", err);
+            setMessages(['Failed to post job. Please try again.']);
+        }
     };
-
     return (
         <div>
             <Navbar />
@@ -183,6 +198,14 @@ export const NewJob = () => {
                         <option value="40k+">Above ₹40,000</option>
                         <option value="unpaid">Unpaid</option>
                     </select>
+                </div>
+                <div className='job-desc'>
+                    <input
+                        type='file'
+                        name="jdfile"
+                        accept='.pdf, .doc, .docx'
+                        onChange={handleFileUpload}
+                    ></input>
                 </div>
                 {messages.length>0 && (
                     <ul className='msg-li'>
