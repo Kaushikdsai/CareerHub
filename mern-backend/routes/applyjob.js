@@ -24,16 +24,22 @@ router.post('/apply', async (req,res) => {
     }
 });
 
-router.get('/recruiter/:id', async (req,res) => {
-    try{
-        const {recruiterId}=req.params;
-        const jobs=await Job.find({ recruiterId });
-        res.status(200).json(jobs);
-    }
-    catch(err){
-        console.error(err);
-        res.status(500).json({ message: 'Server error fetching recruiter jobs' })
-    }
-})
+router.get('/recruiter/:id', async (req, res) => {
+  try {
+    const jobs = await Job.find({ recruiterId: req.params.id });
+
+    // Optional: just to be safe, make sure applicants array exists
+    const jobsWithApplicants = jobs.map(job => ({
+      ...job.toObject(),
+      applicants: job.applicants || []
+    }));
+
+    res.status(200).json(jobsWithApplicants);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error fetching recruiter jobs' });
+  }
+});
+
 
 module.exports=router;
