@@ -202,7 +202,7 @@ export const NewJob = () => {
                 <div className='job-desc'>
                     <input
                         type='file'
-                        name="jdfile"
+                        name="jdFIle"
                         accept='.pdf, .doc, .docx'
                         onChange={handleFileUpload}
                     ></input>

@@ -7,10 +7,39 @@ export const JobDetails = () => {
     const { id }=useParams();
     const [job,setJob]=useState(null);
 
+    const handleApply = async () => {
+        console.log("Student Name:", localStorage.getItem("studentName"));
+        console.log("Student Email:", localStorage.getItem("studentEmail"));
+        console.log("Job ID:", id);
+        console.log("Job Title:", job?.jobDomain);
+        console.log("Recruiter ID:", job?.recruiterId);
+
+        try{
+            const applicantData = {
+                jobId: id,
+                name: localStorage.getItem("studentName"), 
+                email: localStorage.getItem("studentEmail"),
+                phone: localStorage.getItem("studentPhone"),
+                collegeName: localStorage.getItem("collegeName"),
+                yearOfGraduation: localStorage.getItem("yearOfGraduation"),
+                resume: localStorage.getItem("resumeFileName"),
+                jobTitle: job?.jobDomain,   
+                recruiterId: job?.recruiterId
+            };
+            const res=await axios.post("http://localhost:5000/api/apply", applicantData);
+            alert("Application submitted successfully!");
+        }
+        catch(err){
+            console.error(err);
+            alert("Something went wrong while applying.");
+        }
+    }
+
     useEffect(() => {
         const fetchJob = async () => {
             try{
                 const res=await axios.get(`http://localhost:5000/postJob/${id}`);
+                console.log("🔍 Full Job Object:", res.data);
                 setJob(res.data);
             }
             catch(err){
@@ -47,15 +76,16 @@ export const JobDetails = () => {
                     <p><strong>Location:</strong> {job.workLocation}</p>
                     <p><strong>Duration:</strong> {job.jobDuration}</p>
                     <p><strong>Stipend:</strong> {job.stipend}</p>
-                    {job.jdFile && (
+                    {job.jdFilePath && (
                         <div>
                             <p><strong>Job Description: </strong></p>
                             <a
-                                href="{`http://localhost:5000/uploads/${job.jdFile}`}"
+                                href={`http://localhost:5000/uploads/jd/${job.jdFilePath}`}
                                 target="_blank"
                             >View JD File</a>
                         </div>
                     )}
+                    <button onClick={handleApply}>Click to Apply</button>
                 </div>
             </div>
         </>

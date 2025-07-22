@@ -1,3 +1,10 @@
 body{
     color: white;
 }
+.job-card {
+  background-color: #959595;
+  padding: 16px;
+  margin: 10px 0;
+  border-radius: 8px;
+  color: #000000;
+}

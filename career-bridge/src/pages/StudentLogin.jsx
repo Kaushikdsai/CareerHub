@@ -22,6 +22,12 @@ export const StudentLogin = () => {
         localStorage.setItem('token',response.data.token);
         localStorage.setItem('role',response.data.role);
         localStorage.setItem('userId',response.data.studentId);
+        localStorage.setItem('studentName', response.data.name);  // ✅ add this
+        localStorage.setItem('studentEmail', response.data.email); // ✅ add this
+        localStorage.setItem('studentPhone', response.data.phone); // ✅
+        localStorage.setItem('collegeName', response.data.collegeName); // ✅
+        localStorage.setItem('yearOfGraduation', response.data.yearOfGraduation); // ✅
+        localStorage.setItem('resumeFileName', response.data.resume);
         setMessages([response.data.message]);
     }
     catch(err){
