@@ -20,7 +20,22 @@ const jobSchema=new mongoose.Schema({
     jdFilePath: {
         type: String,
         default: null
-    }
+    },
+    applicants: [
+        {
+            name: String,
+            email: String,
+            phone: String,
+            location: String,
+            collegeName: String,
+            yearOfGraduation: Number,
+            resumeUrl: String,
+            appliedAt: {
+                type: Date,
+                default: Date.now
+            }
+        }
+    ]
 }, { timestamps: true });
 
 module.exports=mongoose.model('Job',jobSchema);

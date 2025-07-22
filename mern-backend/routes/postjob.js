@@ -56,7 +56,7 @@ router.post('/recruiter/newjob', auth, upload.single('jdFile'), async (req, res)
       organizationLogo: recruiter.logo || '',
       organizationName: recruiter.companyOrInstituteName,
       recruiterRole: recruiter.role,
-      jdFilePath: req.file ? req.file.path : null
+      jdFilePath: req.file ? req.file.filename : null
     };
 
     const newJob = new Jobs(jobData);
@@ -68,6 +68,24 @@ router.post('/recruiter/newjob', auth, upload.single('jdFile'), async (req, res)
     console.error("❌ Error posting job:", err);
     res.status(500).json({ error: 'Server error', details: err.message });
   }
+});
+
+router.post("/apply/:jobId", async(req,res) => {
+    try{
+        const {applicant}=req.body;
+        const job=await Job.findById(req.params.jobId);
+        if(!jobApplicant){
+            res.status(500).json({ message: 'Applicant not found!' });
+        }
+        else{
+            job.applicants.push(applicant);
+            await job.save();
+            res.json({ message: 'Applied successfully', job });
+        }
+    }
+    catch(err){
+        res.status(500).json({ message: "Server error" });
+    }
 });
 
 router.get('/byRecruiter/:id', async (req,res) => {

@@ -18,7 +18,7 @@ const storage=multer.diskStorage({
     }
 });
 
-const upload=multer({storage:storage});
+const upload=multer({storage: storage});
 
 router.get('/check-token', authMiddleware, (req, res) => {
   res.status(200).json({ valid: true, role: req.user.role });
@@ -68,7 +68,18 @@ router.post('/student/login',async(req,res)=>{
             process.env.JWT_SECRET,
             {expiresIn: process.env.JWT_EXPIRES_IN}
         )
-        res.json({ token, role:'student', studentId:student._id, message: 'Login successful' });
+        res.json({ 
+          token,
+          role: 'student',
+          studentId: student._id,
+          name: student.name,
+          email: student.email,
+          phone: student.phoneNumber,
+          collegeName: student.collegeName,
+          yearOfGraduation: student.yearOfGraduation,
+          resume: student.resume, 
+          message: 'Login successful'
+         });
     }
     catch(err){
         console.error('Login Error:', err);
