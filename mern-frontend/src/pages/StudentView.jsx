@@ -90,7 +90,7 @@ export const StudentView = () => {
               <li key={job._id} className="job-card">
                 {job.organizationLogo && (
                   <img
-                    src={`http://localhost:5000/uploads/${job.organizationLogo}`}
+                    src={job.organizationLogo}
                     alt="Org Logo"
                     className="org-logo"
                   />

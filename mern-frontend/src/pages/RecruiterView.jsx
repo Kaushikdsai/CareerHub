@@ -36,8 +36,8 @@ export const RecruiterView = () => {
                     <p>Phone: {app.phone}</p>
                     <p>College: {app.collegeName}</p>
                     <p>Year of Graduation: {app.yearOfGraduation}</p>
-                    {app.resume && (
-                      <a href={`http://localhost:5000/uploads/${app.resume}`} target="_blank" rel="noreferrer">
+                    {app.resumeUrl && (
+                      <a href={app.resumeUrl} target="_blank" rel="noreferrer">
                         View Resume
                       </a>
                     )}

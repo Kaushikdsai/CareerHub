@@ -5,7 +5,7 @@ import Navbar from '../components/Navbar';
 
 export const NewJob = () => {
     const [messages,setMessages]=useState([]);
-    const [jdFile, setJDFile] = useState(null);
+    const [jdFile, setJDFile]=useState(null);
     const [formData,setFormData]=useState({
         department: '',
         jobDomain: '',
@@ -202,7 +202,7 @@ export const NewJob = () => {
                 <div className='job-desc'>
                     <input
                         type='file'
-                        name="jdFIle"
+                        name="jdFile"
                         accept='.pdf, .doc, .docx'
                         onChange={handleFileUpload}
                     ></input>

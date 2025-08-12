@@ -26,7 +26,8 @@ export const JobDetails = () => {
                 jobTitle: job?.jobDomain,   
                 recruiterId: job?.recruiterId
             };
-            const res=await axios.post("http://localhost:5000/api/apply", applicantData);
+            const jobId=job._id;
+            const res=await axios.post(`http://localhost:5000/postJob/apply/${jobId}`, applicantData);
             alert("Application submitted successfully!");
         }
         catch(err){
@@ -39,7 +40,7 @@ export const JobDetails = () => {
         const fetchJob = async () => {
             try{
                 const res=await axios.get(`http://localhost:5000/postJob/${id}`);
-                console.log("🔍 Full Job Object:", res.data);
+                console.log("Full Job Object:", res.data);
                 setJob(res.data);
             }
             catch(err){
@@ -60,7 +61,7 @@ export const JobDetails = () => {
                 <div className="organization">
                     {job.organizationLogo && (
                         <img
-                            src={`http://localhost:5000/uploads/${job.organizationLogo}`}
+                            src={job.organizationLogo}
                             alt="Organization-logo"
                             className="org-logo"
                         /> 
@@ -80,7 +81,7 @@ export const JobDetails = () => {
                         <div>
                             <p><strong>Job Description: </strong></p>
                             <a
-                                href={`http://localhost:5000/uploads/jd/${job.jdFilePath}`}
+                                href={job.jdFilePath}
                                 target="_blank"
                             >View JD File</a>
                         </div>

@@ -34,7 +34,7 @@ export const StudentRegister = () => {
             formData.append('collegeName', collegeName);
             formData.append('yearOfGraduation', yearOfGraduation);
             formData.append('location', location);
-            formData.append('file',document.querySelector('input[name="file"]').files[0]);
+            formData.append('resume',document.querySelector('input[name="resume"]').files[0]);
             skills.forEach(skill => formData.append('skills[]',skill));
 
             const res=await axios.post('http://localhost:5000/auth/student/register', formData, {
@@ -128,7 +128,7 @@ export const StudentRegister = () => {
 
             <div className="form-group">
               <label htmlFor="resume">Upload your Resume</label><br />
-              <input type="file" name="file" accept=".doc,.docx,.pdf" required />
+              <input type="file" name="resume" accept=".doc,.docx,.pdf" required />
             </div>
 
             <div className="form-group">
