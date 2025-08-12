@@ -1,9 +1,9 @@
 const express=require('express');
 const router=express.Router();
 const Job=require('../models/Jobs');
+const upload = require('../middleware/upload');
 
-router.post('/apply', async (req,res) => {
-    console.log("Received application:", req.body);
+router.post('/apply', upload.single('resume'), async (req,res) => {
     try{
         const {jobId,name,email,phone,collegeName,yearOfGraduation,resume}=req.body;
         const job=await Job.findById(jobId);
@@ -14,7 +14,7 @@ router.post('/apply', async (req,res) => {
         if(alreadyApplied){
             return res.status(400).json({ message:"Already Applied! "});
         }
-        job.applicants.push({ name,email,phone,collegeName,yearOfGraduation,resumeUrl:resume });
+        job.applicants.push({ name,email,phone,collegeName,yearOfGraduation,resumeUrl: req.file?.path || null });
         await job.save();
         res.status(200).json({ message: "Application submitted successfully!" });
     }
@@ -25,17 +25,17 @@ router.post('/apply', async (req,res) => {
 });
 
 router.get('/recruiter/:id', async (req, res) => {
-  try {
-    const jobs = await Job.find({ recruiterId: req.params.id });
+  try{
+    const jobs=await Job.find({ recruiterId: req.params.id });
 
-    // Optional: just to be safe, make sure applicants array exists
-    const jobsWithApplicants = jobs.map(job => ({
+    const jobsWithApplicants=jobs.map(job => ({
       ...job.toObject(),
       applicants: job.applicants || []
     }));
 
     res.status(200).json(jobsWithApplicants);
-  } catch (err) {
+  }
+  catch(err){
     console.error(err);
     res.status(500).json({ message: 'Server error fetching recruiter jobs' });
   }

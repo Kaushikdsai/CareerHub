@@ -7,45 +7,44 @@ const Student=require('../models/Student');
 const Recruiter=require('../models/Recruiter');
 const authMiddleware = require('../middleware/auth');
 const router=express.Router();
-
-const storage=multer.diskStorage({
-    destination:function(req,file,cb){
-      cb(null,'uploads/');
-    },
-    filename:function(req,file,cb){
-      const uniqueSuffix=Date.now()+'-'+Math.round(Math.random()*1E9);
-      cb(null,uniqueSuffix+path.extname(file.originalname));
-    }
-});
-
-const upload=multer({storage: storage});
+const upload=require('../middleware/upload');
+const cloudinary=require('cloudinary').v2;
 
 router.get('/check-token', authMiddleware, (req, res) => {
   res.status(200).json({ valid: true, role: req.user.role });
 });
 
-router.post('/student/register',upload.single('file'),async(req,res)=>{
+router.post('/student/register',upload.single('resume'),async(req,res)=>{
   const{name,email,phoneNumber,password,collegeName,yearOfGraduation,location,skills}=req.body;
   try{
-    const existingStudent=await Student.findOne({email});
-    if(existingStudent){
-      return res.status(400).json({message:'Email already exists'});
-    }
-    const hashedPassword=await bcrypt.hash(password,10);
-    const parsedSkills=Array.isArray(skills)?skills:[skills];
-    const newStudent=new Student({
-      name,
-      email,
-      phoneNumber,
-      password:hashedPassword,
-      collegeName,
-      yearOfGraduation,
-      location,
-      skills: parsedSkills,
-      resume:req.file.filename
-    });
-    await newStudent.save();
-    res.status(201).json({message:'Registration successful'});
+      const existingStudent=await Student.findOne({email});
+      if(existingStudent){
+          return res.status(400).json({message:'Email already exists'});
+      }
+      const hashedPassword=await bcrypt.hash(password,10);
+      const parsedSkills=Array.isArray(skills)?skills:[skills];
+
+      let resumeUrl=null;
+      if(req.file){
+          const uploadRes=await cloudinary.uploader.upload(req.file.path, {
+              folder: "careerhub/resumes",
+              resource_type: "auto"
+          });
+          resumeUrl=uploadRes.secure_url;
+      }
+      const newStudent=new Student({
+          name,
+          email,
+          phoneNumber,
+          password:hashedPassword,
+          collegeName,
+          yearOfGraduation,
+          location,
+          skills: parsedSkills,
+          resume:resumeUrl
+      });
+      await newStudent.save();
+      res.status(201).json({message:'Registration successful'});
   }
   catch(err){
     res.status(500).json({message:'Server error'});
@@ -53,6 +52,7 @@ router.post('/student/register',upload.single('file'),async(req,res)=>{
 });
 
 router.post('/student/login',async(req,res)=>{
+  console.log('Login request body:', req.body);
     const{email,password}=req.body;
     try{
         const student=await Student.findOne({email});
@@ -88,40 +88,52 @@ router.post('/student/login',async(req,res)=>{
 });
 
 router.post('/recruiter/register', upload.single('logo'), async(req,res) => {
-  try {
-    console.log('📥 Incoming recruiter data:', req.body);
+  try{
+      console.log('Incoming recruiter data:', req.body);
 
-    const { name, email, phoneNumber, password, companyOrInstituteName, role, location } = req.body;
+      const { name, email, phoneNumber, password, companyOrInstituteName, role, location } = req.body;
 
-    if (!name || !email || !phoneNumber || !password || !companyOrInstituteName || !role || !location) {
-      return res.status(400).json({ message: 'All fields are required' });
-    }
+      if(!name || !email || !phoneNumber || !password || !companyOrInstituteName || !role || !location) {
+        return res.status(400).json({ message: 'All fields are required' });
+      }
 
-    const existingRecruiter = await Recruiter.findOne({ email });
-    if (existingRecruiter) {
-      return res.status(400).json({ message: 'Email already exists' });
-    }
+      const existingRecruiter=await Recruiter.findOne({ email });
+      if(existingRecruiter){
+        return res.status(400).json({ message: 'Email already exists' });
+      }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+      let logoUrl=null;
 
-    const newRecruiter = new Recruiter({
-      name,
-      email,
-      phoneNumber,
-      password: hashedPassword,
-      companyOrInstituteName,
-      logo: req.file?.filename || null,
-      role,
-      location
-    });
+      if(req.file){
+          const uploadRes=await cloudinary.uploader.upload(req.file.path, {
+              folder: "careerhub/logos"
+          });
+          logoUrl=uploadRes.secure_url;
+      }
 
-    await newRecruiter.save();
+      const hashedPassword=await bcrypt.hash(password, 10);
 
-    res.status(201).json({ recruiterId: newRecruiter._id });
+      const newRecruiter=new Recruiter({
+        name,
+        email,
+        phoneNumber,
+        password: hashedPassword,
+        companyOrInstituteName,
+        logo: logoUrl,
+        role,
+        location
+      });
 
-  } catch (err) {
-    console.error('❌ Recruiter registration error:', err); // 👈 Very important!
-    res.status(500).json({ message: 'Server error', error: err.message });
+      await newRecruiter.save();
+
+      res.status(201).json({ recruiterId: newRecruiter._id });
+  }
+  catch (err){
+       console.error("Recruiter registration error:", err); // full details in terminal
+        res.status(500).json({
+          message: err.message,
+          stack: err.stack
+        });
   }
 });
 
@@ -147,7 +159,8 @@ router.post('/recruiter/login',async(req,res)=>{
 
   }
   catch(err){
-    res.status(500).json({message:'Server error'});
+      console.error(err);
+      res.status(500).json({message:'Server error'});
   }
 });
 
