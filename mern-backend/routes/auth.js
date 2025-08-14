@@ -138,30 +138,30 @@ router.post('/recruiter/register', upload.single('logo'), async(req,res) => {
 });
 
 router.post('/recruiter/login',async(req,res)=>{
-  const{email,password}=req.body;
-  try{
-    const recruiter=await Recruiter.findOne({email});
-    if(!recruiter){
-      return res.status(400).json({message:'Email not found'});
-    }
-    const isMatch=await bcrypt.compare(password,recruiter.password);
-    if(!isMatch){
-      return res.status(400).json({message:'Incorrect Password'});
-    }
-    
-    const token=jwt.sign(
-      {id: recruiter._id, role:'recruiter'},
-      process.env.JWT_SECRET,
-      {expiresIn: process.env.JWT_EXPIRES_IN}
-    )
+    const{email,password}=req.body;
+    try{
+      const recruiter=await Recruiter.findOne({email});
+      if(!recruiter){
+        return res.status(400).json({message:'Email not found'});
+      }
+      const isMatch=await bcrypt.compare(password,recruiter.password);
+      if(!isMatch){
+        return res.status(400).json({message:'Incorrect Password'});
+      }
+      
+      const token=jwt.sign(
+        {id: recruiter._id, role:'recruiter'},
+        process.env.JWT_SECRET,
+        {expiresIn: process.env.JWT_EXPIRES_IN}
+      )
 
-    res.json({ token, role:'recruiter', recruiterId:recruiter._id });
+      res.json({ token, role:'recruiter', recruiterId:recruiter._id });
 
-  }
-  catch(err){
-      console.error(err);
-      res.status(500).json({message:'Server error'});
-  }
+    }
+    catch(err){
+        console.error(err);
+        res.status(500).json({message:'Server error'});
+    }
 });
 
 module.exports=router;

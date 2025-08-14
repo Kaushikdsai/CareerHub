@@ -2,9 +2,22 @@ body{
     color: white;
 }
 .job-card {
-  background-color: #959595;
-  padding: 16px;
-  margin: 10px 0;
-  border-radius: 8px;
-  color: #000000;
+    background-color: #959595;
+    padding: 16px;
+    margin: 10px 0;
+    border-radius: 8px;
+    color: #000000;
+}
+.interview{
+    background-color: green;
+    border: none;
+    color: white;
+    padding: 4px;
+    margin-right: 8px;
+}
+.reject{
+    background-color: rgb(163, 0, 0);
+    border: none;
+    color: white;
+    padding: 4px;
 }

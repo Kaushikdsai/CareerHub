@@ -3,41 +3,35 @@ import Navbar from '../components/Navbar';
 import axios from 'axios';
 
 export const RecruiterLogin = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [messages, setMessages] = useState([]);
+    const [email,setEmail]=useState('');
+    const [password,setPassword]=useState('');
+    const [messages,setMessages]=useState([]);
 
-    const handleSubmit = async (e) => {
+    const handleSubmit=async (e) => {
         e.preventDefault();
         setMessages([]);
-
-        if (!email || !password) {
+        if(!email || !password){
             setMessages(['Email and password are required!']);
             return;
         }
 
-        try {
-            const response = await axios.post('http://localhost:5000/auth/recruiter/login', {
+        try{
+            const response=await axios.post('http://localhost:5000/auth/recruiter/login', {
                 email,
                 password
             });
-
-            const { token, recruiterId, role, message } = response.data;
-
-            // ✅ Save token and recruiterId in localStorage
-            localStorage.setItem('token', token);
+            const { token, recruiterId, role, message }=response.data;
             localStorage.setItem('recruiterId', recruiterId);
             localStorage.setItem('role', role);
-
             setMessages([message || 'Login successful!']);
-
-            // 🔁 Optional: redirect after login
-            window.location.href = '/recruiter-dashboard'; // Change as needed
-        } catch (error) {
+            window.location.href = '/recruiter-view';
+        }
+        catch(error){
             console.error('Login failed:', error);
-            if (error.response && error.response.data && error.response.data.message) {
+            if(error.response && error.response.data && error.response.data.message){
                 setMessages([error.response.data.message]);
-            } else {
+            }
+            else{
                 setMessages(['Something went wrong!']);
             }
         }

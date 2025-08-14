@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import '../styles/RecruiterView.css';
+import InterviewModal from '../components/InterviewModal';
 import axios from 'axios';
 
 export const RecruiterView = () => {
-  const [jobs, setJobs] = useState([]);
+  const [jobs,setJobs]=useState([]);
+  const [selectedApplicant,setSelectedApplicant]=useState(null);
+  const [selectedJob,setSelectedJob]=useState(null);
 
   useEffect(() => {
     const recruiterId = localStorage.getItem('recruiterId');
@@ -40,6 +43,24 @@ export const RecruiterView = () => {
                       <a href={app.resumeUrl} target="_blank" rel="noreferrer">
                         View Resume
                       </a>
+                    )}
+                    <br></br>
+                    <button className='interview' onClick={() => {
+                        setSelectedApplicant(app);
+                        setSelectedJob(job);
+                    }}>Invite for interview</button>
+                    <button className='reject'>Reject</button>
+                    <br></br>
+                    <br></br>
+                    {selectedApplicant?._id===app._id && selectedJob?._id===job._id && (
+                      <InterviewModal
+                        applicant={selectedApplicant}
+                        job={selectedJob}
+                        onClose={() => {
+                          setSelectedApplicant(null);
+                          setSelectedJob(null);
+                        }}
+                      />
                     )}
                   </li>
                 ))}

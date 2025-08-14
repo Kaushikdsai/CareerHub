@@ -1,0 +1,12 @@
+button{
+    border: none;
+    padding: 4px;
+    margin-right: 8px;
+}
+.invite{
+    background-color: black;
+    color: white;
+}
+.cancel{
+    background-color: white;
+}
