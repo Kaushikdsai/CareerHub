@@ -9,6 +9,7 @@ const authRoutes=require('./routes/auth');
 const applyRoutes=require('./routes/applyjob');
 const rateLimit=require('express-rate-limit');
 const interviewRouter=require('./routes/sendInvite')
+const applicationRejection=require('./routes/sendRejection')
 const app=express();
 
 const limiter=rateLimit({
@@ -34,6 +35,7 @@ app.use('/postJob',jobRoutes);
 app.use('/api',applyRoutes);
 app.use('/api/files',fileRoutes);
 app.use('/api/send-interview-invite',interviewRouter);
+app.use('/api/send-rejection-mail',applicationRejection);
 
 app.use('/jd',express.static(path.join(__dirname,'uploads/jd')));
 

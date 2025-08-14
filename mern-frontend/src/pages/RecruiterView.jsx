@@ -6,6 +6,7 @@ import axios from 'axios';
 
 export const RecruiterView = () => {
   const [jobs,setJobs]=useState([]);
+  const [modalType,setModalType]=new useState(null);
   const [selectedApplicant,setSelectedApplicant]=useState(null);
   const [selectedJob,setSelectedJob]=useState(null);
 
@@ -46,13 +47,18 @@ export const RecruiterView = () => {
                     )}
                     <br></br>
                     <button className='interview' onClick={() => {
+                        setModalType('invite');
                         setSelectedApplicant(app);
                         setSelectedJob(job);
                     }}>Invite for interview</button>
-                    <button className='reject'>Reject</button>
+                    <button className='reject' onClick={() => {
+                        setModalType('reject');
+                        setSelectedApplicant(app);
+                        setSelectedJob(job);  
+                    }}>Reject</button>
                     <br></br>
                     <br></br>
-                    {selectedApplicant?._id===app._id && selectedJob?._id===job._id && (
+                    {selectedApplicant?._id===app._id && selectedJob?._id===job._id && modalType && (
                       <InterviewModal
                         applicant={selectedApplicant}
                         job={selectedJob}
