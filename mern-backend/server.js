@@ -4,7 +4,7 @@ const path=require('path');
 const express=require('express');
 const mongoose=require('mongoose');
 const cors=require('cors');
-const jobRoutes=require('./routes/postjob');
+const jobRoutes=require('./routes/jobRoutes');
 const authRoutes=require('./routes/auth');
 const applyRoutes=require('./routes/applyjob');
 const rateLimit=require('express-rate-limit');
@@ -31,7 +31,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/career-bridge',{
 .catch((err) => console.error('MongoDB Error:', err));
 
 app.use('/auth',authRoutes);
-app.use('/postJob',jobRoutes);
+app.use('/api/jobs', jobRoutes);
 app.use('/api',applyRoutes);
 app.use('/api/files',fileRoutes);
 app.use('/api/send-interview-invite',interviewRouter);

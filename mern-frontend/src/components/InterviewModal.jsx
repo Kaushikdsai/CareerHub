@@ -93,7 +93,7 @@ const InterviewModal = ({ type,applicant,job,onClose }) => {
                 </>
             )}
             <br></br>
-            <button onClick={handleSendInvite} className="invite">Send Invite</button>
+            <button onClick={handleSendInvite} className="invite" disabled={type==='invite' && (!date || !time || !mode || (mode==='online' && !link) || (mode==='offline' && !location))}>Send Invite</button>
             <button onClick={onClose} className="cancel">Cancel</button>
         </div>
     );

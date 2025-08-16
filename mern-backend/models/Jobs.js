@@ -21,6 +21,15 @@ const jobSchema=new mongoose.Schema({
         type: String,
         default: null
     },
+    status: {
+        type: String,
+        enum: ['open','closed'],
+        default: 'open'
+    },
+    assessmentLink: {
+        type: String,
+        default: null
+    },
     applicants: [
         {
             name: String,
