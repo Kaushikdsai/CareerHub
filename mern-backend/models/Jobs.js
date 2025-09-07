@@ -47,4 +47,7 @@ const jobSchema=new mongoose.Schema({
     ]
 }, { timestamps: true });
 
+jobSchema.index({ recruiterId: 1 });
+jobSchema.index({ status: 1 });
+
 module.exports=mongoose.model('Job',jobSchema);

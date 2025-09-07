@@ -10,7 +10,7 @@ export const Home = () => {
         <div className="hero-content">
           <h1>Welcome to CareerHub</h1>
           <p>A one-stop platform to connect recruiters with talented students.</p>
-          <a href="/recruiter-register" className="cta-button">Get Started</a>
+          <a href="/student-login" className="cta-button">Get Started</a>
         </div>
       </section>
 

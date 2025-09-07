@@ -4,26 +4,21 @@ const path=require('path');
 const express=require('express');
 const mongoose=require('mongoose');
 const cors=require('cors');
-const jobRoutes=require('./routes/jobRoutes');
+const jobRoutes=require('./routes/postjob');
 const authRoutes=require('./routes/auth');
+const rateLimiter=require("./middleware/rateLimiter.js");
 const applyRoutes=require('./routes/applyjob');
-const rateLimit=require('express-rate-limit');
+const Redis=require('ioredis');
 const interviewRouter=require('./routes/sendInvite')
 const applicationRejection=require('./routes/sendRejection')
 const app=express();
 
-const limiter=rateLimit({
-    windowMs: 15*60*1000,
-    max:100,
-    standardHeaders: true,
-    legacyHeaders: false
-})
-
 app.use(cors());
-app.use(limiter);
+app.use(rateLimiter);
 app.use(express.json());
 
 mongoose.connect('mongodb://127.0.0.1:27017/career-bridge',{
+    maxPoolSize: 100,
     useNewUrlParser: true,
     useUnifiedTopology: true
 })

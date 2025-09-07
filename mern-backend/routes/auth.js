@@ -87,6 +87,20 @@ router.post('/student/login',async(req,res)=>{
     }
 });
 
+router.get('/student/me', authMiddleware, async (req, res) => {
+  try {
+    const student = await Student.findById(req.user.id).select('-password');
+    if (!student) {
+      return res.status(404).json({ message: 'Student not found' });
+    }
+    res.json(student);
+  } catch (err) {
+    console.error('Error fetching student:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+
 router.post('/recruiter/register', upload.single('logo'), async(req,res) => {
   try{
       console.log('Incoming recruiter data:', req.body);

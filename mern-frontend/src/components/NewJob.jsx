@@ -2,8 +2,10 @@ import React, {useState} from 'react';
 import '../styles/NewJob.css';
 import axios from 'axios';
 import Navbar from '../components/Navbar';
+import { useNavigate } from 'react-router-dom';
 
 export const NewJob = () => {
+    const navigate=useNavigate();
     const [messages,setMessages]=useState([]);
     const [jdFile, setJDFile]=useState(null);
     const [formData,setFormData]=useState({
@@ -65,7 +67,7 @@ export const NewJob = () => {
             alert("Recruiter not logged in!");
             return;
         }
-        const token = localStorage.getItem('token'); 
+        const token=sessionStorage.getItem('token'); 
         try{
             const data=new FormData();
             data.append("department",formData.department);
@@ -77,7 +79,7 @@ export const NewJob = () => {
             data.append("onsiteLocation",formData.onsiteLocation);
             data.append("recruiterId",recruiterId);
             data.append("jdFile",jdFile);
-            await axios.post('http://localhost:5000/postJob/recruiter/newjob', data,
+            await axios.post('http://localhost:5000/api/jobs/recruiter/newjob', data,
             {
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -96,6 +98,7 @@ export const NewJob = () => {
             });
             setJDFile(null);
             setMessages([]);
+            navigate('/recruiter-view')
         }
         catch(err){
             console.error("Error posting job:", err);

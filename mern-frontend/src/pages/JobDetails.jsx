@@ -2,18 +2,14 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom"
 import Navbar from "../components/Navbar"
 import axios from "axios";
+import "../styles/JobDetails.css"
 
 export const JobDetails = () => {
     const { id }=useParams();
     const [job,setJob]=useState(null);
+    const token = sessionStorage.getItem('token');
 
     const handleApply = async () => {
-        console.log("Student Name:", localStorage.getItem("studentName"));
-        console.log("Student Email:", localStorage.getItem("studentEmail"));
-        console.log("Job ID:", id);
-        console.log("Job Title:", job?.jobDomain);
-        console.log("Recruiter ID:", job?.recruiterId);
-
         try{
             const applicantData = {
                 jobId: id,
@@ -27,19 +23,27 @@ export const JobDetails = () => {
                 recruiterId: job?.recruiterId
             };
             const jobId=job._id;
-            const res=await axios.post(`http://localhost:5000/postJob/apply/${jobId}`, applicantData);
+            await axios.post(`http://localhost:5000/api/jobs/apply/${jobId}`, applicantData);
             alert("Application submitted successfully!");
         }
         catch(err){
-            console.error(err);
-            alert("Something went wrong while applying.");
+            console.log(token);
+            if(!token){
+                alert('Please login first!');
+            }
+            else if(err.response.status===400){
+                alert(err.response.data.message);
+            }
+            else{
+                alert("Something went wrong while applying.");
+            }
         }
     }
 
     useEffect(() => {
         const fetchJob = async () => {
             try{
-                const res=await axios.get(`http://localhost:5000/postJob/${id}`);
+                const res=await axios.get(`http://localhost:5000/api/jobs/${id}`);
                 console.log("Full Job Object:", res.data);
                 setJob(res.data);
             }
@@ -66,10 +70,11 @@ export const JobDetails = () => {
                             className="org-logo"
                         /> 
                     )}
-                    <h1>{job.organizationName}</h1>
+                    <h1 className="org-name">{job.organizationName}</h1>
                 </div>
                 <div className="job-details">
-                    <h2>{job.jobDomain}</h2>
+                    <h2 className="job-domain">Role: {job.jobDomain}</h2>
+                    <br></br>
                     <p><strong>Organization:</strong> {job.organizationName}</p>
                     <p><strong>Recruiter Role:</strong> {job.recruiterRole}</p>
                     <p><strong>Department:</strong> {job.department}</p>
@@ -86,7 +91,7 @@ export const JobDetails = () => {
                             >View JD File</a>
                         </div>
                     )}
-                    <button onClick={handleApply}>Click to Apply</button>
+                    <button className="apply-btn" onClick={handleApply}>Click to Apply</button>
                 </div>
             </div>
         </>

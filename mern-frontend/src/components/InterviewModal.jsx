@@ -16,7 +16,6 @@ const InterviewModal = ({ type,applicant,job,onClose }) => {
                 applicantName: applicant.name,
                 jobTitle: job.jobDomain,
                 organizationName: job.organizationName,
-                jobPackage: job.package,
                 date,
                 time,
                 mode,

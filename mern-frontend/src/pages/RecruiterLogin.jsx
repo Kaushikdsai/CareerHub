@@ -20,9 +20,11 @@ export const RecruiterLogin = () => {
                 email,
                 password
             });
-            const { token, recruiterId, role, message }=response.data;
-            localStorage.setItem('recruiterId', recruiterId);
+            
+            const { token,recruiterId,role,message }=response.data;
+            sessionStorage.setItem('recruiterId', recruiterId);
             localStorage.setItem('role', role);
+            sessionStorage.setItem('token',token);
             setMessages([message || 'Login successful!']);
             window.location.href = '/recruiter-view';
         }
@@ -77,8 +79,6 @@ export const RecruiterLogin = () => {
                                 ))}
                             </ul>
                         )}
-                        <a href="forgot-password" className="a1">Forgot Password?</a>
-                        <br />
                         <button className='login-btn' type="submit">Login</button>
                         <p className='no-account'>
                             Don't have an Account? <a href="recruiter-register/" className="a1">Signup</a>

@@ -2,11 +2,20 @@ body{
     color: white;
 }
 .job-card {
-    background-color: #959595;
+    background-color: #c6c6c6;
     padding: 16px;
     margin: 10px 0;
     border-radius: 8px;
     color: #000000;
+}
+.new-job, .posted-jobs{
+    font-size: 30px;
+    display: inline;
+}
+.add-new-job{
+    cursor: pointer;
+    background-color: #303030;
+    width: 80px;
 }
 .interview{
     background-color: green;

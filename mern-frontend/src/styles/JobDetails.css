@@ -1,0 +1,16 @@
+.apply-btn{
+    cursor: pointer;
+    background-color: rgb(66, 66, 66);
+}
+.organization{
+    display: flex;
+    flex-direction: row;
+    width: auto;
+}
+.org-name{
+    margin-top: 9px;
+    margin-left: 15px;
+}
+.org-name, .job-domain{
+    display: inline;
+}

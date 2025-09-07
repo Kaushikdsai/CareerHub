@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 import '../styles/RecruiterRegister.css';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export const RecruiterRegister = () => {
     const [name,setName]=useState('');
@@ -15,6 +16,8 @@ export const RecruiterRegister = () => {
     const [confirmPassword,setConfirmPassword]=useState('');
     const [agreeTerms,setAgreeTerms]=useState(false);
     const [messages,setMessages]=useState([]);
+
+    const navigate=useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -44,16 +47,15 @@ export const RecruiterRegister = () => {
             if (logo) {
                 formData.append('logo', logo);
             }
-            const res = await axios.post('http://localhost:5000/auth/recruiter/register', formData, {
+            const res=await axios.post('http://localhost:5000/auth/recruiter/register', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             });
             const {recruiterId}=res.data;
-            localStorage.setItem('recruiterId',recruiterId);
-            setTimeout(() => {
-            window.location.href='/new-job'; 
-            }, 1500);
+            sessionStorage.setItem('recruiterId',recruiterId);
+            navigate('/recruiter-login')
+
         }
         catch(err){
             const msg=err.response?.data?.message || 'Registration failed!';

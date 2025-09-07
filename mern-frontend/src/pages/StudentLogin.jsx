@@ -3,11 +3,14 @@ import Navbar from '../components/Navbar';
 import '../styles/StudentLogin.css';
 import { Link } from 'react-router-dom';
 import axios from "../utils/axiosConfig.js";
+import { useNavigate } from 'react-router-dom';
 
 export const StudentLogin = () => {
   const [email,setEmail]=useState('');
   const [password,setPassword]=useState('');
   const [messages,setMessages]=useState([]);
+
+  const navigate=useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,7 +22,8 @@ export const StudentLogin = () => {
         const response=await axios.post('/auth/student/login', {
             email,password
         });
-        localStorage.setItem('token',response.data.token);
+        navigate('/student-view');
+        sessionStorage.setItem('token',response.data.token);
         localStorage.setItem('role',response.data.role);
         localStorage.setItem('userId',response.data.studentId);
         localStorage.setItem('studentName', response.data.name);  
@@ -75,8 +79,6 @@ export const StudentLogin = () => {
                 ))}
               </ul>
             )}
-            <a href="forgot-password" className="a1">Forgot Password?</a>
-            <br />
             <button className="login-btn" type="submit">
               Login
             </button>

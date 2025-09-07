@@ -4,14 +4,13 @@ const router=express.Router();
 
 router.post('/', async (req,res) => {
     const{
-        applicantEmail, applicantName, jobTitle, organizationName, package, date, time, mode, link, location
+        applicantEmail, applicantName, jobTitle, organizationName, date, time, mode, link, location
     }=req.body;
 
     const emailContent=`
         <h2>Interview Invitation</h2>
         <p>Hi ${applicantName},</p>
         <p>We are pleased to inform you that you have been shortlisted for the position of <strong>${jobTitle}</strong> at <strong>${organizationName}</strong>.</p>
-        <p><strong>Package:</strong> ${package}</p>
         <p><strong>Date & Time:</strong> ${date} at ${time}</p>
         <p><strong>Mode:</strong> ${mode === 'online' ? 'Online' : 'Offline'}</p>
         ${mode === 'online' ? `<p><strong>Meeting Link:</strong> <a href="${link}">${link}</a></p>` : `<p><strong>Location:</strong> ${location}</p>`}
