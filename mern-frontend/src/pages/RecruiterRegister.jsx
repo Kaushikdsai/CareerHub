@@ -40,7 +40,7 @@ export const RecruiterRegister = () => {
             formData.append('name', name);
             formData.append('email', email);
             formData.append('phoneNumber', phoneNumber);
-            formData.append('companyOrInstituteName', company);
+            formData.append('companyName', company);
             formData.append('role', designation);
             formData.append('location', location);
             formData.append('password', password);

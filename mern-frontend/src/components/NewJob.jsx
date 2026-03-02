@@ -206,7 +206,7 @@ export const NewJob = () => {
                     <input
                         type='file'
                         name="jdFile"
-                        accept='.pdf, .doc, .docx'
+                        accept='.pdf, .doc, .docx,.jpg, .jpeg, .png' 
                         onChange={handleFileUpload}
                     ></input>
                 </div>

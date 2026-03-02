@@ -7,28 +7,50 @@ import "../styles/JobDetails.css"
 export const JobDetails = () => {
     const { id }=useParams();
     const [job,setJob]=useState(null);
-    const token = sessionStorage.getItem('token');
+    const [student,setStudent]=useState(null);
+    const token=sessionStorage.getItem('token');
+
+    useEffect(() => {
+        const fetchStudent=async () => {
+            const res=await axios.get('http://localhost:5000/auth/student/me', {
+                headers: { Authorization: `Bearer ${token}` }
+            })
+            setStudent(res.data);
+        }
+        if(token){
+            fetchStudent();
+        }
+    },[token]);
 
     const handleApply = async () => {
         try{
+            if(!student){
+                console.log("HI");
+                alert("Please login first!");
+                return;
+            }
             const applicantData = {
                 jobId: id,
-                name: localStorage.getItem("studentName"), 
-                email: localStorage.getItem("studentEmail"),
-                phone: localStorage.getItem("studentPhone"),
-                collegeName: localStorage.getItem("collegeName"),
-                yearOfGraduation: localStorage.getItem("yearOfGraduation"),
-                resume: localStorage.getItem("resumeFileName"),
+                name: student.name,
+                email: student.email,
+                phone: student.phone,
+                collegeName: student.collegeName,
+                yearOfGraduation: student.yearOfGraduation,
+                resume: student.resume,
                 jobTitle: job?.jobDomain,   
                 recruiterId: job?.recruiterId
             };
             const jobId=job._id;
-            await axios.post(`http://localhost:5000/api/jobs/apply/${jobId}`, applicantData);
+            await axios.post(`http://localhost:5000/api/jobs/apply/${jobId}`, 
+                applicantData,
+                {headers: { Authorization: `Bearer ${token}` }}
+            );
             alert("Application submitted successfully!");
         }
         catch(err){
             console.log(token);
             if(!token){
+                console.log("HELLO");
                 alert('Please login first!');
             }
             else if(err.response.status===400){

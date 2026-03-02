@@ -52,13 +52,13 @@ router.get("/all", async (req,res) => {
 
 router.get('/:id', async(req,res) => {
     try{
-        const job = await Job.findById(req.params.id).populate('recruiterId', 'companyOrInstituteName logo role');
+        const job = await Job.findById(req.params.id).populate('recruiterId', 'companyName logo role');
         if(!job){
             return res.status(404).json({ message: 'Job not found' });
         }
         const jobWithRecruiter = {
             ...job._doc,
-            organizationName: job.recruiterId?.companyOrInstituteName || job.organizationName,
+            organizationName: job.recruiterId?.companyName || job.organizationName,
             organizationLogo: job.recruiterId?.logo || job.organizationLogo,
             recruiterRole: job.recruiterId?.role || job.recruiterRole
         };
@@ -80,7 +80,7 @@ router.post('/recruiter/newjob', auth, upload.single('jdFile'), async (req, res)
             ...req.body,
             recruiterId: req.user.id,
             organizationLogo: recruiter.logo || '',
-            organizationName: recruiter.companyOrInstituteName,
+            organizationName: recruiter.companyName,
             recruiterRole: recruiter.role,
             jdFilePath: req.file?.path || null
         };

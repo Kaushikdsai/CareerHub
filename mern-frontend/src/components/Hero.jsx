@@ -5,7 +5,7 @@ export const Hero = () => {
   return(
     <div className='hero-container'>
         <div className='hero-content'>
-            <h1 className="hero-title">Welcome to CareerBridge</h1>
+            <h1 className="hero-title">Welcome to CareerHub</h1>
             <p className="hero-description">
                 Your gateway to limitless career opportunities. Discover jobs, connect with recruiters, and build your future!
             </p>

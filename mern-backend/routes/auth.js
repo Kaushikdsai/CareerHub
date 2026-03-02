@@ -105,9 +105,9 @@ router.post('/recruiter/register', upload.single('logo'), async(req,res) => {
   try{
       console.log('Incoming recruiter data:', req.body);
 
-      const { name, email, phoneNumber, password, companyOrInstituteName, role, location } = req.body;
+      const { name, email, phoneNumber, password, companyName, role, location } = req.body;
 
-      if(!name || !email || !phoneNumber || !password || !companyOrInstituteName || !role || !location) {
+      if(!name || !email || !phoneNumber || !password || !companyName || !role || !location) {
         return res.status(400).json({ message: 'All fields are required' });
       }
 
@@ -132,7 +132,7 @@ router.post('/recruiter/register', upload.single('logo'), async(req,res) => {
         email,
         phoneNumber,
         password: hashedPassword,
-        companyOrInstituteName,
+        companyName,
         logo: logoUrl,
         role,
         location
@@ -143,7 +143,7 @@ router.post('/recruiter/register', upload.single('logo'), async(req,res) => {
       res.status(201).json({ recruiterId: newRecruiter._id });
   }
   catch (err){
-       console.error("Recruiter registration error:", err); // full details in terminal
+       console.error("Recruiter registration error:", err); 
         res.status(500).json({
           message: err.message,
           stack: err.stack

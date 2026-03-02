@@ -85,7 +85,7 @@ export const RecruiterView = () => {
                             : 'Close Applications'}
                         </button>
 
-                        {modalType === job._id && job.status !== 'closed' && (
+                        {modalType === job._id && (
                           <div className="assessment-section">
                             <p>
                               You have received {job.applicants?.length || 0} applications.

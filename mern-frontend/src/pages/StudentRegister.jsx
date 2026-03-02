@@ -128,7 +128,7 @@ export const StudentRegister = () => {
 
             <div className="form-group">
               <label htmlFor="resume">Upload your Resume</label><br />
-              <input type="file" name="resume" accept=".doc,.docx,.pdf" required />
+              <input type="file" name="resume" accept="'.pdf, .doc, .docx,.jpg, .jpeg, .png'" required />
             </div>
 
             <div className="form-group">

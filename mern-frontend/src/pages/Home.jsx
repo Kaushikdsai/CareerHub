@@ -25,10 +25,6 @@ export const Home = () => {
             <p>🎯Looking for Opportunities? Find jobs, internships & freelance gigs.</p>
             <a href='/student-login'>Click here.</a>
           </div>
-          <div className="feature-card">
-            <p>🚀Forming a Team? Post your hackathon/project opportunity as a Recruiter.</p>
-            <a href='/recruiter-login'>Click here.</a>
-          </div>
         </div>
       </section>
 

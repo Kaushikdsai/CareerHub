@@ -5,7 +5,7 @@ const recruiterSchema=new mongoose.Schema({
     email: {type: String, unique: true},
     phoneNumber: {type: Number, unique: true},
     password: String,
-    companyOrInstituteName: String,
+    companyName: String,
     role: String,
     location: String,
     logo: { type: String, default: null },

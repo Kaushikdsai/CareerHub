@@ -29,6 +29,7 @@ exports.closeJob=async (req,res) => {
 
 exports.openJob=async (req,res) => {
     try{
+        console.log("DONE");
         const {jobId}=req.params;
         const job=await Job.findById(jobId);
         if(!job){
