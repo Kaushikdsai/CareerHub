@@ -2,113 +2,115 @@ const express=require('express');
 const router=express.Router();
 const Job=require('../models/Jobs');
 const auth=require('../middleware/auth');
-const multer=require('multer');
 const Recruiter=require('../models/Recruiter');
 const upload=require('../middleware/upload');
 const jobController=require('../controllers/jobController');
+const {redis}=require('../config/redis');
 
+router.get("/all",async(req,res)=>{
+    try{
+        const {domain,department,jobType,location,duration,stipend}=req.query;
+        let query={};
+        query.status="open";
 
-router.get("/all", async (req,res) => {
-    try {
-        const { domain,department,jobType,location,duration,stipend }=req.query
-        let query={}
-        query.status="open"
-        if(domain && domain !== "any"){
-            query.jobDomain={ $regex: domain, $options: "i" }
-        }
+        if(domain&&domain!=="any") query.jobDomain={$regex:domain,$options:"i"};
 
         if(department){
-            const depArray=Array.isArray(department)?department:[department]
-            query.department={ $in: depArray.map(d=>new RegExp(`^${d}$`,"i")) }
+            const depArray=Array.isArray(department)?department:[department];
+            query.department={$in:depArray.map(d=>new RegExp(`^${d}$`,"i"))};
         }
 
         if(jobType){
-            const jobTypeArray=Array.isArray(jobType)?jobType:[jobType]
-            query.jobType={ $in: jobTypeArray.map(t=>new RegExp(`^${t}$`,"i")) }
+            const jobTypeArray=Array.isArray(jobType)?jobType:[jobType];
+            query.jobType={$in:jobTypeArray.map(t=>new RegExp(`^${t}$`,"i"))};
         }
 
         if(location){
-            const locationArray=Array.isArray(location)?location:[location]
-            query.workLocation={ $in: locationArray.map(l=>new RegExp(`^${l}$`,"i")) }
+            const locationArray=Array.isArray(location)?location:[location];
+            query.workLocation={$in:locationArray.map(l=>new RegExp(`^${l}$`,"i"))};
         }
 
         if(duration){
-            const durationArray=Array.isArray(duration)?duration:[duration]
-            query.jobDuration={ $in: durationArray.map(d=>new RegExp(`^${d}$`,"i")) }
+            const durationArray=Array.isArray(duration)?duration:[duration];
+            query.jobDuration={$in:durationArray.map(d=>new RegExp(`^${d}$`,"i"))};
         }
 
         if(stipend){
-            const stipendArray=Array.isArray(stipend)?stipend:[stipend]
-            query.stipend={ $in: stipendArray.map(s=>new RegExp(`^${s}$`,"i")) }
+            const stipendArray=Array.isArray(stipend)?stipend:[stipend];
+            query.stipend={$in:stipendArray.map(s=>new RegExp(`^${s}$`,"i"))};
         }
-        const jobs=await Job.find(query)
-        res.json(jobs)
-    }
-    catch(err){
-        console.error(err)
-        res.status(500).json({message:"Server error"})
-    }
-})
 
-router.get('/:id', async(req,res) => {
+        const cacheKey="jobs:all";
+        const cached=await redis.get(cacheKey);
+        if(cached) return res.json(JSON.parse(cached));
+
+        const jobs=await Job.find(query);
+        await redis.set(cacheKey,JSON.stringify(jobs),{ex:60});
+        res.json(jobs);
+    }catch(err){
+        console.error(err);
+        res.status(500).json({message:"Server error"});
+    }
+});
+
+router.get('/:id',async(req,res)=>{
     try{
-        const job = await Job.findById(req.params.id).populate('recruiterId', 'companyName logo role');
-        if(!job){
-            return res.status(404).json({ message: 'Job not found' });
-        }
-        const jobWithRecruiter = {
+        const cacheKey=`job:${req.params.id}`;
+        const cached=await redis.get(cacheKey);
+        if(cached) return res.json(JSON.parse(cached));
+
+        const job=await Job.findById(req.params.id)
+        .populate('recruiterId','companyName logo role');
+
+        if(!job) return res.status(404).json({message:'Job not found'});
+
+        const jobWithRecruiter={
             ...job._doc,
-            organizationName: job.recruiterId?.companyName || job.organizationName,
-            organizationLogo: job.recruiterId?.logo || job.organizationLogo,
-            recruiterRole: job.recruiterId?.role || job.recruiterRole
+            organizationName:job.recruiterId?.companyName||job.organizationName,
+            organizationLogo:job.recruiterId?.logo||job.organizationLogo,
+            recruiterRole:job.recruiterId?.role||job.recruiterRole
         };
+
+        await redis.set(cacheKey,JSON.stringify(jobWithRecruiter),{ex:60});
         res.status(200).json(jobWithRecruiter);
+    }catch(err){
+        res.status(500).json({message:'Server Error',error:err.message});
     }
-    catch(err){
-        res.status(500).json({ message: 'Server Error', error: err.message });
-    }
-})
+});
 
-router.post('/recruiter/newjob', auth, upload.single('jdFile'), async (req, res) => {
-    try {
+router.post('/recruiter/newjob',auth,upload.single('jdFile'),async(req,res)=>{
+    try{
         const recruiter=await Recruiter.findById(req.user.id);
-        if(!recruiter){
-            return res.status(404).json({ error: 'Recruiter not found' });
-        }
+        if(!recruiter) return res.status(404).json({error:'Recruiter not found'});
 
-        const jobData = {
+        const jobData={
             ...req.body,
-            recruiterId: req.user.id,
-            organizationLogo: recruiter.logo || '',
-            organizationName: recruiter.companyName,
-            recruiterRole: recruiter.role,
-            jdFilePath: req.file?.path || null
+            recruiterId:req.user.id,
+            organizationLogo:recruiter.logo||'',
+            organizationName:recruiter.companyName,
+            recruiterRole:recruiter.role,
+            jdFilePath:req.file?.path||null
         };
 
         const newJob=new Job(jobData);
         await newJob.save();
 
-        res.status(201).json({ message: 'Job posted successfully' });
-
-    }
-    catch(err){
-        console.error("Error posting job:", err);
-        res.status(500).json({ error: 'Server error', details: err.message });
+        await redis.del("jobs:all");
+        res.status(201).json({message:'Job posted successfully'});
+    }catch(err){
+        console.error("Error posting job:",err);
+        res.status(500).json({error:'Server error',details:err.message});
     }
 });
 
-router.post("/apply/:jobId", async(req,res) => {
+router.post("/apply/:jobId",async(req,res)=>{
     try{
-        const { name,email,phone,collegeName,yearOfGraduation,resume,jobTitle,recruiterId }=req.body;
+        const {name,email,phone,collegeName,yearOfGraduation,resume,jobTitle,recruiterId}=req.body;
         const job=await Job.findById(req.params.jobId);
-        if(!job){
-            return res.status(500).json({ message: 'Job not found!' });
-        }
-        
-        const alreadyApplied=job.applicants.find(applicant => applicant.email===email);
-        if(alreadyApplied){
-            return res.status(400).json({ message: 'Already applied!' });
-        }
+        if(!job) return res.status(500).json({message:'Job not found!'});
+
+        const alreadyApplied=job.applicants.find(app=>app.email===email);
+        if(alreadyApplied) return res.status(400).json({message:'Already applied!'});
 
         job.applicants.push({
             name,
@@ -116,26 +118,30 @@ router.post("/apply/:jobId", async(req,res) => {
             phone,
             collegeName,
             yearOfGraduation,
-            resumeUrl: resume,
+            resumeUrl:resume,
             jobTitle,
             recruiterId
         });
 
         await job.save();
-        res.json({ message: 'Applied successfully', job});
-    }
-    catch(err){
-        res.status(500).json({ message: "Server error" });
+        await redis.del(`job:${req.params.jobId}`);
+        res.json({message:'Applied successfully',job});
+    }catch(err){
+        res.status(500).json({message:"Server error"});
     }
 });
 
-router.get('/byRecruiter/:id', async (req,res) => {
+router.get('/byRecruiter/:id',async(req,res)=>{
     try{
-        const jobs=await Job.find({ recruiterId: req.params.id })
+        const cacheKey=`recruiterJobs:${req.params.id}`;
+        const cached=await redis.get(cacheKey);
+        if(cached) return res.json(JSON.parse(cached));
+
+        const jobs=await Job.find({recruiterId:req.params.id});
+        await redis.set(cacheKey,JSON.stringify(jobs),{ex:60});
         res.json(jobs);
-    }
-    catch(err){
-        res.status(500).json({ error: 'Failed to fetch jobs' });
+    }catch(err){
+        res.status(500).json({error:'Failed to fetch jobs'});
     }
 });
 

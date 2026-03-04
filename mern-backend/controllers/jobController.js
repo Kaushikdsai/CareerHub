@@ -1,28 +1,25 @@
 const Job=require('../models/Jobs');
-const { sendAssessmentEmail }=require('../utils/sendMail');
-const { redis }=require('../config/redis'); 
+const {sendAssessmentEmail}=require('../utils/sendMail');
+const {redis}=require('../config/redis');
 
-exports.closeJob = async (req, res) => {
-    try {
-        const { jobId } = req.params;
-        const { assessmentLink, deadline } = req.body;
+exports.closeJob=async(req,res)=>{
+    try{
+        const {jobId}=req.params;
+        const {assessmentLink,deadline}=req.body;
 
-        const job = await Job.findById(jobId);
+        const job=await Job.findById(jobId);
+        if(!job) return res.status(404).json({message:'Job not found'});
 
-        if (!job) {
-            return res.status(404).json({ message: 'Job not found' });
-        }
-
-        job.status = 'closed';
-        job.assessmentLink = assessmentLink?.trim() || null;
-
+        job.status='closed';
+        job.assessmentLink=assessmentLink?.trim()||null;
         await job.save();
 
         await redis.del(`job:${jobId}`);
+        await redis.del("jobs:all");
 
-        if (job.assessmentLink) {
+        if(job.assessmentLink){
             await Promise.all(
-                job.applicants.map(app =>
+                job.applicants.map(app=>
                     sendAssessmentEmail(
                         app.email,
                         app.name,
@@ -34,38 +31,29 @@ exports.closeJob = async (req, res) => {
             );
         }
 
-        res.json({ message: 'Job closed successfully', job });
-
-    } 
-    catch (err) {
+        res.json({message:'Job closed successfully',job});
+    }catch(err){
         console.error(err);
-        res.status(500).json({ message: 'Server error' });
+        res.status(500).json({message:'Server error'});
     }
 };
 
-exports.openJob = async (req, res) => {
-    try {
+exports.openJob=async(req,res)=>{
+    try{
+        const {jobId}=req.params;
+        const job=await Job.findById(jobId);
+        if(!job) return res.status(404).json({message:'Job not found'});
 
-        const { jobId } = req.params;
-
-        const job = await Job.findById(jobId);
-
-        if (!job) {
-            return res.status(404).json({ message: 'Job not found' });
-        }
-
-        job.status = 'open';
-        job.assessmentLink = null;
-
+        job.status='open';
+        job.assessmentLink=null;
         await job.save();
 
         await redis.del(`job:${jobId}`);
+        await redis.del("jobs:all");
 
-        res.json({ message: 'Job reopened successfully', job });
-
-    } 
-    catch (err) {
+        res.json({message:'Job reopened successfully',job});
+    }catch(err){
         console.error(err);
-        res.status(500).json({ message: 'Server error' });
+        res.status(500).json({message:'Server error'});
     }
 };
