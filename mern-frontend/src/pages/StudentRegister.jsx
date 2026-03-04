@@ -1,170 +1,165 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React,{useState,useRef} from 'react';
 import Navbar from '../components/Navbar';
 import '../styles/StudentRegister.css';
-import { AddSkills } from '../components/AddSkills';
+import {AddSkills} from '../components/AddSkills';
+import { useNavigate } from 'react-router-dom';
 
-export const StudentRegister = () => {
-  const [name,setName]=useState('');
-  const [collegeName,setCollegeName]=useState('');
-  const [yearOfGraduation,setYearOfGraduation]=useState('');
-  const [location,setLocation]=useState('');
-  const [email,setEmail]=useState('');
-  const [phoneNumber,setPhoneNumber]=useState('');
-  const [password,setPassword]=useState('');
-  const [confirmPassword,setConfirmPassword]=useState('');
-  const [skills, setSkills]=useState([]);
-  const [messages,setMessages]=useState([]);
+export const StudentRegister=()=>{
+  const navigate=useNavigate();
+  const[name,setName]=useState('');
+  const[collegeName,setCollegeName]=useState('');
+  const[yearOfGraduation,setYearOfGraduation]=useState('');
+  const[location,setLocation]=useState('');
+  const[email,setEmail]=useState('');
+  const[phoneNumber,setPhoneNumber]=useState('');
+  const[password,setPassword]=useState('');
+  const[confirmPassword,setConfirmPassword]=useState('');
+  const[skills,setSkills]=useState([]);
+  const[messages,setMessages]=useState([]);
+  const fileRef=useRef(null);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit=async(e)=>{
     e.preventDefault();
-    const errors = [];
-    if(!name) errors.push('Name is required!');
-    if(!email) errors.push('Email is required!');
-    if(!password) errors.push('Password is required!');
-    if(password!==confirmPassword) errors.push('Passwords do not match!');
+    const errors=[];
+    if(!name)errors.push('Name is required!');
+    if(!email)errors.push('Email is required!');
+    if(!password)errors.push('Password is required!');
+    if(password!==confirmPassword)errors.push('Passwords do not match!');
     setMessages(errors);
     if(errors.length===0){
-        try{
-            const formData=new FormData();
-            formData.append('name',name);
-            formData.append('email', email);
-            formData.append('phoneNumber', phoneNumber);
-            formData.append('password', password);
-            formData.append('collegeName', collegeName);
-            formData.append('yearOfGraduation', yearOfGraduation);
-            formData.append('location', location);
-            formData.append('resume',document.querySelector('input[name="resume"]').files[0]);
-            skills.forEach(skill => formData.append('skills[]',skill));
-
-            const res=await axios.post('http://localhost:5000/auth/student/register', formData, {
-              headers: {'Content-Type': 'multipart/form-data'}
-            });
-            setMessages([res.data.message]);
-        }
-        catch(err){
-            setMessages([err.response?.data?.message || 'Registration failed']);
-        }
+      try{
+        const formData=new FormData();
+        formData.append('name',name);
+        formData.append('email',email);
+        formData.append('phoneNumber',phoneNumber);
+        formData.append('password',password);
+        formData.append('collegeName',collegeName);
+        formData.append('yearOfGraduation',yearOfGraduation);
+        formData.append('location',location);
+        if(fileRef.current?.files[0])formData.append('resume',fileRef.current.files[0]);
+        skills.forEach(skill=>formData.append('skills',skill));
+        const res=await axios.post('http://localhost:5000/auth/student/register',formData);
+        setMessages([res.data.message]);
+        navigate('/auth/student/login');
+      }catch(err){
+        setMessages([err.response?.data?.message||'Registration failed']);
+      }
     }
   };
 
-  return (
+  return(
     <>
-      <Navbar />
+      <Navbar/>
       <div className="sr-main">
         <form method="POST" onSubmit={handleSubmit}>
           <h1>STUDENT REGISTRATION</h1>
           <div className="details">
             <div className="form-group">
-              <label htmlFor="name">Name</label><br />
+              <label htmlFor="name">Name</label><br/>
               <input
                 id="name"
                 name="name"
                 placeholder="Enter your Name"
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                onChange={(e)=>setName(e.target.value)}
               />
             </div>
-
             <div className="form-group">
-              <label htmlFor="email">Email</label><br />
+              <label htmlFor="email">Email</label><br/>
               <input
                 id="email"
                 name="email"
                 type="email"
                 placeholder="Enter your email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e)=>setEmail(e.target.value)}
               />
             </div>
-
             <div className="form-group">
-              <label htmlFor="phoneNumber">Phone Number</label><br />
+              <label htmlFor="phoneNumber">Phone Number</label><br/>
               <input
                 id="phoneNumber"
                 name="phoneNumber"
-                type="phoneNumber"
+                type="tel"
                 placeholder="Enter your phone number"
                 value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
+                onChange={(e)=>setPhoneNumber(e.target.value)}
               />
             </div>
-
             <div className="form-group">
-              <label htmlFor="college-name">College Name</label><br />
+              <label htmlFor="college-name">College Name</label><br/>
               <input
                 id="college-name"
-                name="college-name"
+                name="collegeName"
                 placeholder="Enter your college name"
                 value={collegeName}
-                onChange={(e) => setCollegeName(e.target.value)}
+                onChange={(e)=>setCollegeName(e.target.value)}
               />
             </div>
-
             <div className="form-group">
-              <label htmlFor="year-of-grad">Year of Graduation</label><br />
+              <label htmlFor="year-of-grad">Year of Graduation</label><br/>
               <input
                 id="year-of-grad"
-                name="year-of-grad"
+                name="yearOfGraduation"
                 placeholder="Enter your year of graduation"
                 value={yearOfGraduation}
-                onChange={(e) => setYearOfGraduation(e.target.value)}
+                onChange={(e)=>setYearOfGraduation(e.target.value)}
               />
             </div>
-
             <div className="form-group">
-              <label htmlFor="location">Location</label><br />
+              <label htmlFor="location">Location</label><br/>
               <input
                 id="location"
                 name="location"
-                placeholder="Enter your location"
                 type="text"
+                placeholder="Enter your location"
                 value={location}
-                onChange={(e) => setLocation(e.target.value)}
+                onChange={(e)=>setLocation(e.target.value)}
               />
             </div>
-
             <AddSkills skills={skills} setSkills={setSkills}/>
-
             <div className="form-group">
-              <label htmlFor="resume">Upload your Resume</label><br />
-              <input type="file" name="resume" accept="'.pdf, .doc, .docx,.jpg, .jpeg, .png'" required />
+              <label htmlFor="resume">Upload your Resume</label><br/>
+              <input
+                type="file"
+                name="resume"
+                ref={fileRef}
+                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                required
+              />
             </div>
-
             <div className="form-group">
-              <label htmlFor="password1">Create a password</label><br />
+              <label htmlFor="password1">Create a password</label><br/>
               <input
                 id="password1"
                 name="password"
                 type="password"
                 placeholder="Enter your password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e)=>setPassword(e.target.value)}
               />
             </div>
-
             <div className="form-group">
-              <label htmlFor="password2">Confirm your password</label><br />
+              <label htmlFor="password2">Confirm your password</label><br/>
               <input
                 id="password2"
                 name="confirm_password"
                 type="password"
                 placeholder="Confirm your password"
                 value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
+                onChange={(e)=>setConfirmPassword(e.target.value)}
               />
             </div>
-
-            {messages.length>0 && (
+            {messages.length>0&&(
               <ul className="msg-li">
-                {messages.map((msg, idx) => (
-                  <li key={idx} style={{ color: msg.includes('Success') ? 'green' : 'red' }}>
+                {messages.map((msg,idx)=>(
+                  <li key={idx} style={{color:msg.includes('Success')?'green':'red'}}>
                     {msg}
                   </li>
                 ))}
               </ul>
             )}
-
             <button className="register-btn" type="submit">Register</button>
           </div>
         </form>

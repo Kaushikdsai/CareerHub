@@ -18,6 +18,9 @@ const storage=new CloudinaryStorage({
         if(file.fieldname==='resume'){
             folderName='careerhub_resumes';
         }
+        if(file.fieldname==='logo') {
+            folderName='careerhub_logos';
+        }
         return {
             folder: folderName,
             allowed_formats: ['pdf','docx','jpg', 'jpeg', 'png' ]
